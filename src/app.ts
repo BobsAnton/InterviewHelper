@@ -1,28 +1,26 @@
 import express from "express";
-import mongoose from "mongoose";
-import path from "path";
-const app = express();
-const port = 8080;
+import mongoose from 'mongoose';
+import bodyParser from "body-parser";
+import { indexRouter } from "./routes/index";
+import { technicalFieldsRouter } from "./routes/technical-fields";
+import { questionsRouter } from "./routes/questions";
 
-app.get( "/", async (req, res) => {
-    mongoose.connect('mongodb://localhost:27017/', async function(err) {
-        if (err) throw err;
+async function run(): Promise<void> {
+    await mongoose.connect('mongodb://localhost:27017/');
 
-        const customerSchema = new mongoose.Schema({
-            name: String,
-            address: String
-        });
+    const app = express();
+    const port = 8080;
     
-        const Customer = mongoose.model('Customer', customerSchema);
-
-        const customer1 = new Customer({ name: 'John', address: 'Highway 71'});
-        await customer1.save();
-        console.log(await Customer.find());
-
-        res.sendFile('index.html', {root: path.join(__dirname, "..") });
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
+    
+    app.use("/", indexRouter);
+    app.use("/technical-fields", technicalFieldsRouter);
+    app.use("/questions", questionsRouter);
+    
+    app.listen(port, () => {
+        console.log( `server started at http://localhost:${ port }` );
     });
-} );
+}
 
-app.listen( port, () => {
-    console.log( `server started at http://localhost:${ port }` );
-} );
+run().catch((err) => console.error('Application init error', err));
