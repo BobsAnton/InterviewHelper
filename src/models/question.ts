@@ -1,20 +1,10 @@
 import { model, Schema } from 'mongoose';
 import { TechnicalField } from './technical-field';
 
-enum Complexity
-{
-	Low,
-	BelowAverage,
-	Average,
-	AboveAverage,
-	High,
-	VeryHigh
-}
-
 export interface Question {
 	name: string;
 	description: string;
-	complexity: string; //Complexity;
+	complexity: 'Low' | 'BelowAverage' | 'Average' | 'AboveAverage' | 'High' | 'VeryHigh';
 	technicalField: TechnicalField;
 }
 

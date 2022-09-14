@@ -1,17 +1,10 @@
 import { model, Schema } from 'mongoose';
 import { Candidate } from './candidate';
 
-enum Status {
-	Scheduled,
-	Canceled,
-	InProgress,
-	Completed
-}
-
 export interface Interview {
 	candidate: Candidate;
 	date: Date;
-	status: string; //Status;
+	status: 'Scheduled' | 'Canceled' | 'InProgress' | 'Completed';
 	review: string;
 }
 
