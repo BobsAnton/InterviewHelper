@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import mongoose from 'mongoose';
 import bodyParser from "body-parser";
 import { indexRouter } from "./routes/index";
@@ -9,7 +10,9 @@ async function run(): Promise<void> {
     await mongoose.connect('mongodb://localhost:27017/');
 
     const app = express();
-    const port = 8080;
+    const port = 8081;
+    
+    app.use(cors());
     
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
