@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import mongoose from 'mongoose';
 import bodyParser from "body-parser";
@@ -20,6 +20,11 @@ async function run(): Promise<void> {
     app.use("/", indexRouter);
     app.use("/technical-fields", technicalFieldsRouter);
     app.use("/questions", questionsRouter);
+
+    app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+        console.error(err.stack)
+        res.status(500).send('Internal Server Error!')
+    });
     
     app.listen(port, () => {
         console.log( `server started at http://localhost:${ port }` );
