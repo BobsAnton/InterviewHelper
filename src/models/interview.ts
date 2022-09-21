@@ -1,14 +1,14 @@
 import { model, Schema } from 'mongoose';
-import { Candidate } from './candidate';
+import { ICandidate } from './candidate';
 
-export interface Interview {
-	candidate: Candidate;
+export interface IInterview {
+	candidate: ICandidate;
 	date: Date;
 	status: 'Scheduled' | 'Canceled' | 'InProgress' | 'Completed';
 	review: string;
 }
 
-const InterviewSchema = new Schema<Interview>({
+const InterviewSchema = new Schema<IInterview>({
 	candidate: {
 		type: Schema.Types.ObjectId,
 		ref: "Candidate"
@@ -22,4 +22,4 @@ const InterviewSchema = new Schema<Interview>({
 	review: { type: String }
 });
 
-export const InterviewModel = model<Interview>('Interview', InterviewSchema);
+export const InterviewModel = model<IInterview>('Interview', InterviewSchema);

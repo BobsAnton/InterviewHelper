@@ -2,15 +2,15 @@ import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import mongoose from 'mongoose';
 import bodyParser from "body-parser";
-import { indexRouter } from "./routes/index";
-import { technicalFieldsRouter } from "./routes/technical-fields";
-import { questionsRouter } from "./routes/questions";
+import { indexRouter } from "./routes/indexRoutes";
+import { technicalFieldsRouter } from "./routes/technicalFieldRoutes";
+import { questionsRouter } from "./routes/questionRoutes";
+import appConfig from './appConfig';
 
 async function run(): Promise<void> {
-    await mongoose.connect('mongodb://localhost:27017/');
+    await mongoose.connect(appConfig.mongodbConnectionString);
 
     const app = express();
-    const port = 8081;
     
     app.use(cors());
     
@@ -26,8 +26,8 @@ async function run(): Promise<void> {
         res.status(500).send('Internal Server Error!')
     });
     
-    app.listen(port, () => {
-        console.log( `server started at http://localhost:${ port }` );
+    app.listen(appConfig.port, () => {
+        console.log( `server started at http://localhost:${ appConfig.port }` );
     });
 }
 

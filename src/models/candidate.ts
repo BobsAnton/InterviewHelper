@@ -1,14 +1,14 @@
 import { model, Schema } from 'mongoose';
-import { CandidateTechnicalField } from './candidate-technical-field';
-import { Interview } from './interview';
+import { ICandidateTechnicalField } from './candidateTechnicalField';
+import { IInterview } from './interview';
 
-export interface Candidate {
+export interface ICandidate {
 	name: string;
-	skills: CandidateTechnicalField[];
-	interviews: Interview[];
+	skills: ICandidateTechnicalField[];
+	interviews: IInterview[];
 }
 
-const CandidateSchema = new Schema<Candidate>({
+const CandidateSchema = new Schema<ICandidate>({
 	name: { type: String, unique: true, required: true },
 	skills: [{
 		type: Schema.Types.ObjectId,
@@ -20,4 +20,4 @@ const CandidateSchema = new Schema<Candidate>({
 	}]
 });
 
-export const CandidateModel = model<Candidate>('Candidate', CandidateSchema);
+export const CandidateModel = model<ICandidate>('Candidate', CandidateSchema);
