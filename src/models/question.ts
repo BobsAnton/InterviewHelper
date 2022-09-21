@@ -110,7 +110,7 @@ export class Question {
 		let questionFromDb = await QuestionModel.findOne({ _id: id });
 		if (questionFromDb === null)
 		{
-			throw new Error("TechnicalField not found!");
+			throw new Error("Question not found!");
 		}
 	
 		await QuestionModel.deleteOne({ _id: id });

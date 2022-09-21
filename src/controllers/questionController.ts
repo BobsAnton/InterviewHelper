@@ -27,11 +27,7 @@ export class QuestionController {
 			name: req.body.name,
 			description: req.body.description,
 			complexity: req.body.complexity,
-			technicalField: {
-				id: req.body.technicalField.id,
-				name: req.body.technicalField.name,
-				order: req.body.technicalField.order
-			}
+			technicalField: req.body.technicalField
 		});
 
 		res.send(await Question.create(newQuestion));
@@ -48,11 +44,7 @@ export class QuestionController {
 			name: req.body.name,
 			description: req.body.description,
 			complexity: req.body.complexity,
-			technicalField: {
-				id: req.body.technicalField.id,
-				name: req.body.technicalField.name,
-				order: req.body.technicalField.order
-			}
+			technicalField: req.body.technicalField
 		});
 
 		res.send(await Question.updateById(req.params.id, updatedQuestion));

@@ -2,10 +2,15 @@ import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import mongoose from 'mongoose';
 import bodyParser from "body-parser";
+import appConfig from './appConfig';
+
 import { indexRouter } from "./routes/indexRoutes";
 import { technicalFieldsRouter } from "./routes/technicalFieldRoutes";
 import { questionsRouter } from "./routes/questionRoutes";
-import appConfig from './appConfig';
+import { interviewsRouter } from "./routes/interviewRoutes";
+import { interviewQuestionsRouter } from "./routes/interviewQuestionRoutes";
+import { candidateTechnicalFieldsRouter } from "./routes/candidateTechnicalFieldRoutes";
+import { candidatesRouter } from "./routes/candidateRoutes";
 
 async function run(): Promise<void> {
     await mongoose.connect(appConfig.mongodbConnectionString);
@@ -20,6 +25,10 @@ async function run(): Promise<void> {
     app.use("/", indexRouter);
     app.use("/technical-fields", technicalFieldsRouter);
     app.use("/questions", questionsRouter);
+    app.use("/interviews", interviewsRouter);
+    app.use("/interview-questions", interviewQuestionsRouter);
+    app.use("/candidate-technical-fields", candidateTechnicalFieldsRouter);
+    app.use("/candidates", candidatesRouter);
 
     app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
         console.error(err.stack)
