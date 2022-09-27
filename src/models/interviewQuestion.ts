@@ -50,12 +50,14 @@ export class InterviewQuestion {
 
 		// Find by id
 		static async findById(id: string): Promise<IInterviewQuestion> {
-			return await InterviewQuestionModel.findOne({ _id: id }).populate('interview').populate('question');
+			return await InterviewQuestionModel.findOne({ _id: id }).populate({ path: 'interview', populate: { path: 'candidate' } }).populate({ path: 'question', populate: { path: 'technicalField' } });
 		}
 	
 		// Find all
 		static async findAll(): Promise<IInterviewQuestion[]> {
-			return await InterviewQuestionModel.find({}).populate('interview').populate('question');
+			return await InterviewQuestionModel.find({})
+				.populate({ path: 'interview', populate: { path: 'candidate' } })
+				.populate({ path: 'question', populate: { path: 'technicalField' } });
 		}
 	
 		// Create
@@ -81,7 +83,9 @@ export class InterviewQuestion {
 		
 			let interviewQuestionFromDb = await newInterviewQuestionModel.save();
 		
-			return await (await interviewQuestionFromDb.populate('interview')).populate('question');
+			return await (await interviewQuestionFromDb
+				.populate({ path: 'interview', populate: { path: 'candidate' } })
+				).populate({ path: 'question', populate: { path: 'technicalField' } });
 		}
 	
 		// Update by id
@@ -114,7 +118,10 @@ export class InterviewQuestion {
 				}
 			);
 		
-			return await (await InterviewQuestionModel.findOne({ _id: id }).populate('interview')).populate('question');
+			return await (
+				await InterviewQuestionModel.findOne({ _id: id })
+				.populate({ path: 'interview', populate: { path: 'candidate' } })
+				).populate({ path: 'question', populate: { path: 'technicalField' } });
 		}
 	
 		// Remove by id
@@ -127,6 +134,8 @@ export class InterviewQuestion {
 		
 			await InterviewQuestionModel.deleteOne({ _id: id });
 		
-			return await (await interviewQuestionFromDb.populate('interview')).populate('question');
+			return await (await interviewQuestionFromDb
+				.populate({ path: 'interview', populate: { path: 'candidate' } })
+				).populate({ path: 'question', populate: { path: 'technicalField' } });
 		}
 }

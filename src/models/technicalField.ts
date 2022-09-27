@@ -1,4 +1,6 @@
 import { model, Schema } from 'mongoose';
+import { CandidateTechnicalFieldModel } from './candidateTechnicalField';
+import { InterviewQuestionModel } from './interviewQuestion';
 import { QuestionModel } from './question';
 
 export interface ITechnicalField {
@@ -79,15 +81,28 @@ export class TechnicalField {
 		{
 			throw new Error("TechnicalField not found!");
 		}
+
+		let questionsFromDb = await QuestionModel.find({ technicalField: id });
+		questionsFromDb.forEach(async questionFromDb => {
+			if (questionFromDb !== null)
+			{
+				await QuestionModel.deleteMany({ technicalField: id });
 	
-		let questionFromDb = await QuestionModel.find({ technicalField: id });
-		if (questionFromDb !== null)
+				let interviewQuestionFromDb = await InterviewQuestionModel.find({ question: questionFromDb._id });
+				if (interviewQuestionFromDb !== null)
+				{
+					await InterviewQuestionModel.deleteMany({ question: questionFromDb._id });
+				}
+			}
+		});
+
+		let candidateTechnicalFieldFromDb = await CandidateTechnicalFieldModel.find({ technicalField: id });
+		if (candidateTechnicalFieldFromDb !== null)
 		{
-			await QuestionModel.deleteMany({ technicalField: id });
+			await CandidateTechnicalFieldModel.deleteMany({ technicalField: id });
 		}
 	
 		await TechnicalFieldModel.deleteOne({ _id: id });
-	
 		return technicalFieldFromDb;
 	}
 }

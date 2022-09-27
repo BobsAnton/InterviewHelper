@@ -1,24 +1,15 @@
 import { model, Schema } from 'mongoose';
 import { ICandidateTechnicalField, CandidateTechnicalFieldModel } from './candidateTechnicalField';
 import { IInterview, InterviewModel } from './interview';
+import { InterviewQuestionModel } from './interviewQuestion';
 
 export interface ICandidate {
 	id: string;
 	name: string;
-	skills: ICandidateTechnicalField[];
-	interviews: IInterview[];
 }
 
 const CandidateSchema = new Schema<ICandidate>({
-	name: { type: String, unique: true, required: true },
-	skills: [{
-		type: Schema.Types.ObjectId,
-		ref: "CandidateTechnicalField"
-	}],
-	interviews: [{
-		type: Schema.Types.ObjectId,
-		ref: "Interview"
-	}]
+	name: { type: String, unique: true, required: true }
 });
 
 CandidateSchema.virtual('id').get(function(){
@@ -34,44 +25,30 @@ export const CandidateModel = model<ICandidate>('Candidate', CandidateSchema);
 export class Candidate {
 	id: string;
 	name: string;
-	skills: ICandidateTechnicalField[];
-	interviews: IInterview[];
 
 	constructor(candidate: ICandidate) {
 		this.id = candidate.id;
 		this.name = candidate.name;
-		this.skills = candidate.skills;
-		this.interviews = candidate.interviews;
 	}
 
 		// Find by id
 		static async findById(id: string): Promise<ICandidate> {
-			return await CandidateModel.findOne({ _id: id }).populate('candidateTechnicalField').populate('interview');
+			return await CandidateModel.findOne({ _id: id });
 		}
 	
 		// Find all
 		static async findAll(): Promise<ICandidate[]> {
-			return await CandidateModel.find({}).populate('candidateTechnicalField').populate('interview');
+			return await CandidateModel.find({});
 		}
 	
 		// Create
 		static async create(newCandidate: ICandidate): Promise<ICandidate> {
-			//let technicalFieldFromDb = await TechnicalFieldModel.findOne({ _id: newCandidate.technicalField.id });
-			//if (technicalFieldFromDb === null)
-			//{
-			//	throw new Error("TechnicalField not found!");
-			//}
-	
 			let newCandidateModel = new CandidateModel({
 				id: '',
-				name: newCandidate.name,
-				skills: newCandidate.skills,
-				interviews: newCandidate.interviews
+				name: newCandidate.name
 			});
 		
-			let candidateFromDb = await newCandidateModel.save();
-		
-			return await (await candidateFromDb.populate('candidateTechnicalField')).populate('interview');
+			return await newCandidateModel.save();
 		}
 	
 		// Update by id
@@ -81,23 +58,15 @@ export class Candidate {
 			{
 				throw new Error("Candidate not found!");
 			}
-	
-			//let technicalFieldFromDb = await TechnicalFieldModel.findOne({ _id: updatedCandidate.technicalField.id });
-			//if (technicalFieldFromDb === null)
-			//{
-			//	throw new Error("TechnicalField not found!");
-			//}
 		
 			await CandidateModel.updateOne(
 				{ _id: id },
 				{
-					name: updatedCandidate.name,
-					skills: updatedCandidate.skills,
-					interviews: updatedCandidate.interviews
+					name: updatedCandidate.name
 				}
 			);
 		
-			return await (await CandidateModel.findOne({ _id: id }).populate('candidateTechnicalField')).populate('interview');
+			return await CandidateModel.findOne({ _id: id });
 		}
 	
 		// Remove by id
@@ -107,9 +76,28 @@ export class Candidate {
 			{
 				throw new Error("Candidate not found!");
 			}
+
+			let interviewsFromDb = await InterviewModel.find({ candidate: id });
+			interviewsFromDb.forEach(async interviewFromDb => {
+				if (interviewFromDb !== null)
+				{
+					await InterviewModel.deleteMany({ candidate: id });
+	
+					let interviewQuestionFromDb = await InterviewQuestionModel.find({ interview: interviewFromDb._id });
+					if (interviewQuestionFromDb !== null)
+					{
+						await InterviewQuestionModel.deleteMany({ interview: interviewFromDb._id });
+					}
+				}
+			});
+	
+			let candidateTechnicalFieldFromDb = await CandidateTechnicalFieldModel.find({ candidate: id });
+			if (candidateTechnicalFieldFromDb !== null)
+			{
+				await CandidateTechnicalFieldModel.deleteMany({ candidate: id});
+			}
 		
 			await CandidateModel.deleteOne({ _id: id });
-		
-			return await (await candidateFromDb.populate('candidateTechnicalField')).populate('interview');
+			return candidateFromDb;
 		}
 }

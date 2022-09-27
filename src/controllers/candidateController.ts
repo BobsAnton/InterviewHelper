@@ -24,9 +24,7 @@ export class CandidateController {
 
 		const newCandidate = new Candidate({
 			id: '',
-			name: req.body.name,
-			skills: req.body.candidateTechnicalFields,
-			interviews: req.body.interviews
+			name: req.body.name
 		});
 
 		res.send(await Candidate.create(newCandidate));
@@ -40,9 +38,7 @@ export class CandidateController {
 
 		const updatedCandidate = new Candidate({
 			id: req.params.id,
-			name: req.body.name,
-			skills: req.body.candidateTechnicalFields,
-			interviews: req.body.interviews
+			name: req.body.name
 		});
 
 		res.send(await Candidate.updateById(req.params.id, updatedCandidate));

@@ -1,4 +1,5 @@
 import { model, Schema } from 'mongoose';
+import { InterviewQuestionModel } from './interviewQuestion';
 import { ITechnicalField, TechnicalFieldModel } from './technicalField';
 
 export interface IQuestion {
@@ -111,6 +112,12 @@ export class Question {
 		if (questionFromDb === null)
 		{
 			throw new Error("Question not found!");
+		}
+	
+		let interviewQuestionFromDb = await InterviewQuestionModel.find({ question: questionFromDb._id });
+		if (interviewQuestionFromDb !== null)
+		{
+			await InterviewQuestionModel.deleteMany({ question: questionFromDb._id });
 		}
 	
 		await QuestionModel.deleteOne({ _id: id });

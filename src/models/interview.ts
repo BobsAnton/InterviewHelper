@@ -1,5 +1,6 @@
 import { model, Schema } from 'mongoose';
 import { ICandidate, CandidateModel } from './candidate';
+import { InterviewQuestionModel } from './interviewQuestion';
 
 export interface IInterview {
 	id: string;
@@ -112,7 +113,13 @@ export class Interview {
 			{
 				throw new Error("Interview not found!");
 			}
-		
+
+			let interviewQuestionFromDb = await InterviewQuestionModel.find({ interview: interviewFromDb._id });
+			if (interviewQuestionFromDb !== null)
+			{
+				await InterviewQuestionModel.deleteMany({ interview: interviewFromDb._id });
+			}
+	
 			await InterviewModel.deleteOne({ _id: id });
 		
 			return await interviewFromDb.populate('candidate');
