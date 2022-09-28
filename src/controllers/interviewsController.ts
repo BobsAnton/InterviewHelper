@@ -1,19 +1,19 @@
 import { Request, Response } from 'express';
-import { Candidate } from '../models/candidate';
+import { InterviewsService } from '../services/interviewsService';
 
-export class CandidateController {
+export class InterviewsController {
 	// Find by id
 	static findById = async (req: Request, res: Response) => {
 		if (!req.body) { 
 			res.status(400).send({ message: "Body can not be empty!" });
 		}
 
-		res.send(await Candidate.findById(req.params.id));
+		res.send(await InterviewsService.findById(req.params.id));
 	} 
 
 	// Find all
 	static findAll = async (req: Request, res: Response) => {
-		res.send(await Candidate.findAll());
+		res.send(await InterviewsService.findAll());
 	}
 
 	// Create
@@ -22,12 +22,15 @@ export class CandidateController {
 			res.status(400).send({ message: "Body can not be empty!" });
 		}
 
-		const newCandidate = new Candidate({
+		const newInterview = new InterviewsService({
 			id: '',
-			name: req.body.name
+			candidate: req.body.candidate,
+			date: req.body.date,
+			status: req.body.status,
+			review: req.body.review
 		});
 
-		res.send(await Candidate.create(newCandidate));
+		res.send(await InterviewsService.create(newInterview));
 	}
 
 	// Update by id
@@ -36,16 +39,19 @@ export class CandidateController {
 			res.status(400).send({ message: "Body can not be empty!" });
 		}
 
-		const updatedCandidate = new Candidate({
+		const updatedInterview = new InterviewsService({
 			id: req.params.id,
-			name: req.body.name
+			candidate: req.body.candidate,
+			date: req.body.date,
+			status: req.body.status,
+			review: req.body.review
 		});
 
-		res.send(await Candidate.updateById(req.params.id, updatedCandidate));
+		res.send(await InterviewsService.updateById(req.params.id, updatedInterview));
 	}
 
 	// Remove by id
 	static removeById = async (req: Request, res: Response) => {
-		res.send(await Candidate.removeById(req.params.id));
+		res.send(await InterviewsService.removeById(req.params.id));
 	}
 };

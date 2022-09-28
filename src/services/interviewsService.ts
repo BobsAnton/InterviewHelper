@@ -1,40 +1,8 @@
-import { model, Schema } from 'mongoose';
-import { ICandidate, CandidateModel } from './candidate';
-import { InterviewQuestionModel } from './interviewQuestion';
+import { IInterview, InterviewModel } from '../models/interviewsModel';
+import { ICandidate, CandidateModel } from '../models/candidatesModel';
+import { InterviewQuestionModel } from '../models/interviewQuestionsModel';
 
-export interface IInterview {
-	id: string;
-	candidate: ICandidate;
-	date: Date;
-	status: string; // 'Scheduled' | 'Canceled' | 'InProgress' | 'Completed';
-	review: string;
-}
-
-const InterviewSchema = new Schema<IInterview>({
-	candidate: {
-		type: Schema.Types.ObjectId,
-		ref: "Candidate"
-	},
-	date: { type: Date, required: true },
-	status: {
-		type: String,
-		enum: ['Scheduled', 'Canceled', 'InProgress', 'Completed'],
-		default: 'Scheduled'
-	},
-	review: { type: String }
-});
-
-InterviewSchema.virtual('id').get(function(){
-    return this._id.toHexString();
-});
-
-InterviewSchema.set('toJSON', {
-    virtuals: true
-});
-
-export const InterviewModel = model<IInterview>('Interview', InterviewSchema);
-
-export class Interview {
+export class InterviewsService {
 	id: string;
 	candidate: ICandidate;
 	date: Date;

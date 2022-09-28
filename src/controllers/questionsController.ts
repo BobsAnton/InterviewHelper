@@ -1,19 +1,19 @@
 import { Request, Response } from 'express';
-import { Question } from '../models/question';
+import { QuestionsService } from '../services/questionsService';
 
-export class QuestionController {
+export class QuestionsController {
 	// Find by id
 	static findById = async (req: Request, res: Response) => {
 		if (!req.body) { 
 			res.status(400).send({ message: "Body can not be empty!" });
 		}
 
-		res.send(await Question.findById(req.params.id));
+		res.send(await QuestionsService.findById(req.params.id));
 	} 
 
 	// Find all
 	static findAll = async (req: Request, res: Response) => {
-		res.send(await Question.findAll());
+		res.send(await QuestionsService.findAll());
 	}
 
 	// Create
@@ -22,7 +22,7 @@ export class QuestionController {
 			res.status(400).send({ message: "Body can not be empty!" });
 		}
 
-		const newQuestion = new Question({
+		const newQuestion = new QuestionsService({
 			id: '',
 			name: req.body.name,
 			description: req.body.description,
@@ -30,7 +30,7 @@ export class QuestionController {
 			technicalField: req.body.technicalField
 		});
 
-		res.send(await Question.create(newQuestion));
+		res.send(await QuestionsService.create(newQuestion));
 	}
 
 	// Update by id
@@ -39,7 +39,7 @@ export class QuestionController {
 			res.status(400).send({ message: "Body can not be empty!" });
 		}
 
-		const updatedQuestion = new Question({
+		const updatedQuestion = new QuestionsService({
 			id: req.params.id,
 			name: req.body.name,
 			description: req.body.description,
@@ -47,11 +47,11 @@ export class QuestionController {
 			technicalField: req.body.technicalField
 		});
 
-		res.send(await Question.updateById(req.params.id, updatedQuestion));
+		res.send(await QuestionsService.updateById(req.params.id, updatedQuestion));
 	}
 
 	// Remove by id
 	static removeById = async (req: Request, res: Response) => {
-		res.send(await Question.removeById(req.params.id));
+		res.send(await QuestionsService.removeById(req.params.id));
 	}
 };

@@ -1,39 +1,8 @@
-import { model, Mongoose, Schema } from 'mongoose';
-import { IInterview, InterviewModel } from './interview';
-import { IQuestion, QuestionModel } from './question';
+import { IInterviewQuestion, InterviewQuestionModel } from '../models/interviewQuestionsModel';
+import { IInterview, InterviewModel } from '../models/interviewsModel';
+import { IQuestion, QuestionModel } from '../models/questionsModel';
 
-export interface IInterviewQuestion {
-	id: string;
-	interview: IInterview;
-	question: IQuestion;
-	grade: number;
-	comment: string;
-}
-
-const InterviewQuestionSchema = new Schema<IInterviewQuestion>({
-	interview: {
-		type: Schema.Types.ObjectId,
-		ref: "Interview"
-	},
-	question: {
-		type: Schema.Types.ObjectId,
-		ref: "Question"
-	},
-	grade: { type: Number, required: true },
-	comment: { type: String }
-});
-
-InterviewQuestionSchema.virtual('id').get(function(){
-    return this._id.toHexString();
-});
-
-InterviewQuestionSchema.set('toJSON', {
-    virtuals: true
-});
-
-export const InterviewQuestionModel = model<IInterviewQuestion>('InterviewQuestion', InterviewQuestionSchema);
-
-export class InterviewQuestion {
+export class InterviewQuestionsService {
 	id: string;
 	interview: IInterview;
 	question: IQuestion;

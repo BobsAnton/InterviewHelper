@@ -1,30 +1,9 @@
-import { model, Schema } from 'mongoose';
-import { CandidateTechnicalFieldModel } from './candidateTechnicalField';
-import { InterviewQuestionModel } from './interviewQuestion';
-import { QuestionModel } from './question';
+import { ITechnicalField, TechnicalFieldModel } from '../models/technicalFieldsModel';
+import { CandidateTechnicalFieldModel } from '../models/candidateTechnicalFieldsModel';
+import { InterviewQuestionModel } from '../models/interviewQuestionsModel';
+import { QuestionModel } from '../models/questionsModel';
 
-export interface ITechnicalField {
-	id: string;
-	name: string;
-	order: number;
-}
-
-const TechnicalFieldSchema = new Schema<ITechnicalField>({
-	name: { type: String, required: true },
-	order: { type: Number, required: true }
-});
-
-TechnicalFieldSchema.virtual('id').get(function(){
-    return this._id.toHexString();
-});
-
-TechnicalFieldSchema.set('toJSON', {
-    virtuals: true
-});
-
-export const TechnicalFieldModel = model<ITechnicalField>('TechnicalField', TechnicalFieldSchema);
-
-export class TechnicalField {
+export class TechnicalFieldsService {
 	id: string;
 	name: string;
 	order: number;

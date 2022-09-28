@@ -1,28 +1,9 @@
-import { model, Schema } from 'mongoose';
-import { ICandidateTechnicalField, CandidateTechnicalFieldModel } from './candidateTechnicalField';
-import { IInterview, InterviewModel } from './interview';
-import { InterviewQuestionModel } from './interviewQuestion';
+import { ICandidate, CandidateModel } from '../models/candidatesModel';
+import { CandidateTechnicalFieldModel } from '../models/candidateTechnicalFieldsModel';
+import { InterviewModel } from '../models/interviewsModel';
+import { InterviewQuestionModel } from '../models/interviewQuestionsModel';
 
-export interface ICandidate {
-	id: string;
-	name: string;
-}
-
-const CandidateSchema = new Schema<ICandidate>({
-	name: { type: String, unique: true, required: true }
-});
-
-CandidateSchema.virtual('id').get(function(){
-    return this._id.toHexString();
-});
-
-CandidateSchema.set('toJSON', {
-    virtuals: true
-});
-
-export const CandidateModel = model<ICandidate>('Candidate', CandidateSchema);
-
-export class Candidate {
+export class CandidatesService {
 	id: string;
 	name: string;
 

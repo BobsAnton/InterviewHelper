@@ -1,19 +1,20 @@
 import { Request, Response } from 'express';
-import { Interview } from '../models/interview';
+import { TechnicalFieldsService } from '../services/technicalFieldsService';
 
-export class InterviewController {
+export class TechnicalFieldsController {
+	
 	// Find by id
 	static findById = async (req: Request, res: Response) => {
-		if (!req.body) { 
+		if (!req.body) {
 			res.status(400).send({ message: "Body can not be empty!" });
 		}
 
-		res.send(await Interview.findById(req.params.id));
+		res.send(await TechnicalFieldsService.findById(req.params.id));
 	} 
 
 	// Find all
 	static findAll = async (req: Request, res: Response) => {
-		res.send(await Interview.findAll());
+		res.send(await TechnicalFieldsService.findAll());
 	}
 
 	// Create
@@ -22,15 +23,13 @@ export class InterviewController {
 			res.status(400).send({ message: "Body can not be empty!" });
 		}
 
-		const newInterview = new Interview({
+		const newTechnicalField = new TechnicalFieldsService({
 			id: '',
-			candidate: req.body.candidate,
-			date: req.body.date,
-			status: req.body.status,
-			review: req.body.review
+			name: req.body.name,
+			order: req.body.order
 		});
 
-		res.send(await Interview.create(newInterview));
+		res.send(await TechnicalFieldsService.create(newTechnicalField));
 	}
 
 	// Update by id
@@ -39,19 +38,17 @@ export class InterviewController {
 			res.status(400).send({ message: "Body can not be empty!" });
 		}
 
-		const updatedInterview = new Interview({
+		const updatedTechnicalField = new TechnicalFieldsService({
 			id: req.params.id,
-			candidate: req.body.candidate,
-			date: req.body.date,
-			status: req.body.status,
-			review: req.body.review
+			name: req.body.name,
+			order: req.body.order
 		});
 
-		res.send(await Interview.updateById(req.params.id, updatedInterview));
+		res.send(await TechnicalFieldsService.updateById(req.params.id, updatedTechnicalField));
 	}
 
 	// Remove by id
 	static removeById = async (req: Request, res: Response) => {
-		res.send(await Interview.removeById(req.params.id));
+		res.send(await TechnicalFieldsService.removeById(req.params.id));
 	}
 };

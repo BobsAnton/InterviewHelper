@@ -2,15 +2,15 @@ import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import mongoose from 'mongoose';
 import bodyParser from "body-parser";
-import appConfig from './appConfig';
+import appConfig from './configs/appConfig';
 
-import { indexRouter } from "./routes/indexRoutes";
-import { technicalFieldsRouter } from "./routes/technicalFieldRoutes";
-import { questionsRouter } from "./routes/questionRoutes";
-import { interviewsRouter } from "./routes/interviewRoutes";
-import { interviewQuestionsRouter } from "./routes/interviewQuestionRoutes";
-import { candidateTechnicalFieldsRouter } from "./routes/candidateTechnicalFieldRoutes";
-import { candidatesRouter } from "./routes/candidateRoutes";
+import { indexRouter } from "./routes/indexRoute";
+import { technicalFieldsRouter } from "./routes/technicalFieldsRoute";
+import { questionsRouter } from "./routes/questionsRoute";
+import { interviewsRouter } from "./routes/interviewsRoute";
+import { interviewQuestionsRouter } from "./routes/interviewQuestionsRoute";
+import { candidateTechnicalFieldsRouter } from "./routes/candidateTechnicalFieldsRoute";
+import { candidatesRouter } from "./routes/candidatesRoute";
 
 async function run(): Promise<void> {
     await mongoose.connect(appConfig.mongodbConnectionString);
