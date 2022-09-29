@@ -1,57 +1,64 @@
 import { Request, Response } from 'express';
-import { QuestionsService } from '../services/questionsService';
+import { IQuestion } from '../models/questionsModel';
+import questionsService from '../services/questionsService';
 
-export class QuestionsController {
-	// Find by id
-	static findById = async (req: Request, res: Response) => {
-		if (!req.body) { 
-			res.status(400).send({ message: "Body can not be empty!" });
-		}
-
-		res.send(await QuestionsService.findById(req.params.id));
-	} 
-
-	// Find all
-	static findAll = async (req: Request, res: Response) => {
-		res.send(await QuestionsService.findAll());
+async function findById(req: Request, res: Response) {
+	if (!req.body) { 
+		res.status(400).send({ message: "Body can not be empty!" });
 	}
 
-	// Create
-	static create = async (req: Request, res: Response) => {
-		if (!req.body) {
-			res.status(400).send({ message: "Body can not be empty!" });
-		}
+	const result: IQuestion = await questionsService.findById(req.params.id)
+	res.send(result);
+}
 
-		const newQuestion = new QuestionsService({
-			id: '',
-			name: req.body.name,
-			description: req.body.description,
-			complexity: req.body.complexity,
-			technicalField: req.body.technicalField
-		});
+async function findAll(req: Request, res: Response) {
+	const result: IQuestion[] = await questionsService.findAll()
+	res.send(result);
+}
 
-		res.send(await QuestionsService.create(newQuestion));
+async function create(req: Request, res: Response) {
+	if (!req.body) {
+		res.status(400).send({ message: "Body can not be empty!" });
 	}
 
-	// Update by id
-	static updateById = async (req: Request, res: Response) => {
-		if (!req.body) {
-			res.status(400).send({ message: "Body can not be empty!" });
-		}
+	const newQuestion: IQuestion = {
+		id: '',
+		name: req.body.name,
+		description: req.body.description,
+		complexity: req.body.complexity,
+		technicalField: req.body.technicalField
+	};
 
-		const updatedQuestion = new QuestionsService({
-			id: req.params.id,
-			name: req.body.name,
-			description: req.body.description,
-			complexity: req.body.complexity,
-			technicalField: req.body.technicalField
-		});
+	const result: IQuestion = await questionsService.create(newQuestion);
+	res.send(result);
+}
 
-		res.send(await QuestionsService.updateById(req.params.id, updatedQuestion));
+async function updateById(req: Request, res: Response) {
+	if (!req.body) {
+		res.status(400).send({ message: "Body can not be empty!" });
 	}
 
-	// Remove by id
-	static removeById = async (req: Request, res: Response) => {
-		res.send(await QuestionsService.removeById(req.params.id));
-	}
-};
+	const updatedQuestion: IQuestion = {
+		id: req.params.id,
+		name: req.body.name,
+		description: req.body.description,
+		complexity: req.body.complexity,
+		technicalField: req.body.technicalField
+	};
+
+	const result: IQuestion = await questionsService.updateById(req.params.id, updatedQuestion);
+	res.send(result);
+}
+
+async function removeById(req: Request, res: Response) {
+	const result: IQuestion = await questionsService.removeById(req.params.id);
+	res.send(result);
+}
+
+export default {
+	findById,
+	findAll,
+	create,
+	updateById,
+	removeById
+}

@@ -1,16 +1,16 @@
 import express from 'express';
-import { CandidatesController } from '../controllers/candidatesController';
+import candidatesController from '../controllers/candidatesController';
 
 const router = express.Router();
 
-router.get("/:id", CandidatesController.findById);
+router.get("/:id", candidatesController.findById);
 
-router.get('/', CandidatesController.findAll);
+router.get('/', candidatesController.findAll);
 
-router.post('/', CandidatesController.create);
+router.post('/', candidatesController.create);
 
-router.delete('/:id', CandidatesController.removeById);
+router.delete('/:id', candidatesController.removeById);
 
-router.put('/:id', CandidatesController.updateById);
+router.put('/:id', candidatesController.updateById);
 
 export const candidatesRouter = router;

@@ -1,51 +1,57 @@
 import { Request, Response } from 'express';
-import { CandidatesService } from '../services/candidatesService';
+import { ICandidate } from '../models/candidatesModel';
+import candidatesService from '../services/candidatesService';
 
-export class CandidatesController {
-	// Find by id
-	static findById = async (req: Request, res: Response) => {
-		if (!req.body) { 
-			res.status(400).send({ message: "Body can not be empty!" });
-		}
-
-		res.send(await CandidatesService.findById(req.params.id));
-	} 
-
-	// Find all
-	static findAll = async (req: Request, res: Response) => {
-		res.send(await CandidatesService.findAll());
+async function findById(req: Request, res: Response) {
+	if (!req.body) { 
+		res.status(400).send({ message: "Body can not be empty!" });
 	}
 
-	// Create
-	static create = async (req: Request, res: Response) => {
-		if (!req.body) {
-			res.status(400).send({ message: "Body can not be empty!" });
-		}
+	const result: ICandidate = await candidatesService.findById(req.params.id);
+	res.send(result);
+}
 
-		const newCandidate = new CandidatesService({
-			id: '',
-			name: req.body.name
-		});
+async function findAll(req: Request, res: Response) {
+	const result: ICandidate[] = await candidatesService.findAll();
+	res.send(result);
+}
 
-		res.send(await CandidatesService.create(newCandidate));
+async function create(req: Request, res: Response) {
+	if (!req.body) {
+		res.status(400).send({ message: "Body can not be empty!" });
 	}
 
-	// Update by id
-	static updateById = async (req: Request, res: Response) => {
-		if (!req.body) {
-			res.status(400).send({ message: "Body can not be empty!" });
-		}
+	const newCandidate: ICandidate = {
+		id: '',
+		name: req.body.name
+	};
 
-		const updatedCandidate = new CandidatesService({
-			id: req.params.id,
-			name: req.body.name
-		});
+	res.send(await candidatesService.create(newCandidate));
+}
 
-		res.send(await CandidatesService.updateById(req.params.id, updatedCandidate));
+async function updateById(req: Request, res: Response) {
+	if (!req.body) {
+		res.status(400).send({ message: "Body can not be empty!" });
 	}
 
-	// Remove by id
-	static removeById = async (req: Request, res: Response) => {
-		res.send(await CandidatesService.removeById(req.params.id));
-	}
-};
+	const updatedCandidate: ICandidate = {
+		id: req.params.id,
+		name: req.body.name
+	};
+
+	const result: ICandidate = await candidatesService.updateById(req.params.id, updatedCandidate);
+	res.send(result);
+}
+
+async function removeById(req: Request, res: Response) {
+	const result: ICandidate = await candidatesService.removeById(req.params.id);
+	res.send(result);
+}
+
+export default {
+	findById,
+	findAll,
+	create,
+	updateById,
+	removeById
+}

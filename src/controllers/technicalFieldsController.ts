@@ -1,54 +1,60 @@
 import { Request, Response } from 'express';
-import { TechnicalFieldsService } from '../services/technicalFieldsService';
+import { ITechnicalField } from '../models/technicalFieldsModel';
+import technicalFieldsService from '../services/technicalFieldsService';
 
-export class TechnicalFieldsController {
-	
-	// Find by id
-	static findById = async (req: Request, res: Response) => {
-		if (!req.body) {
-			res.status(400).send({ message: "Body can not be empty!" });
-		}
-
-		res.send(await TechnicalFieldsService.findById(req.params.id));
-	} 
-
-	// Find all
-	static findAll = async (req: Request, res: Response) => {
-		res.send(await TechnicalFieldsService.findAll());
+async function findById(req: Request, res: Response) {
+	if (!req.body) {
+		res.status(400).send({ message: "Body can not be empty!" });
 	}
 
-	// Create
-	static create = async (req: Request, res: Response) => {
-		if (!req.body) {
-			res.status(400).send({ message: "Body can not be empty!" });
-		}
+	const result: ITechnicalField = await technicalFieldsService.findById(req.params.id);
+	res.send(result);
+}
 
-		const newTechnicalField = new TechnicalFieldsService({
-			id: '',
-			name: req.body.name,
-			order: req.body.order
-		});
+async function findAll(req: Request, res: Response) {
+	const result: ITechnicalField[] = await technicalFieldsService.findAll();
+	res.send(result);
+}
 
-		res.send(await TechnicalFieldsService.create(newTechnicalField));
+async function create(req: Request, res: Response) {
+	if (!req.body) {
+		res.status(400).send({ message: "Body can not be empty!" });
 	}
 
-	// Update by id
-	static updateById = async (req: Request, res: Response) => {
-		if (!req.body) {
-			res.status(400).send({ message: "Body can not be empty!" });
-		}
+	const newTechnicalField: ITechnicalField = {
+		id: '',
+		name: req.body.name,
+		order: req.body.order
+	};
 
-		const updatedTechnicalField = new TechnicalFieldsService({
-			id: req.params.id,
-			name: req.body.name,
-			order: req.body.order
-		});
+	const result: ITechnicalField = await technicalFieldsService.create(newTechnicalField);
+	res.send(result);
+}
 
-		res.send(await TechnicalFieldsService.updateById(req.params.id, updatedTechnicalField));
+async function updateById(req: Request, res: Response) {
+	if (!req.body) {
+		res.status(400).send({ message: "Body can not be empty!" });
 	}
 
-	// Remove by id
-	static removeById = async (req: Request, res: Response) => {
-		res.send(await TechnicalFieldsService.removeById(req.params.id));
-	}
-};
+	const updatedTechnicalField: ITechnicalField = {
+		id: req.params.id,
+		name: req.body.name,
+		order: req.body.order
+	};
+
+	const result: ITechnicalField = await technicalFieldsService.updateById(req.params.id, updatedTechnicalField);
+	res.send(result);
+}
+
+async function removeById(req: Request, res: Response) {
+	const result: ITechnicalField = await technicalFieldsService.removeById(req.params.id);
+	res.send(result);
+}
+
+export default {
+	findById,
+	findAll,
+	create,
+	updateById,
+	removeById
+}

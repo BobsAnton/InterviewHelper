@@ -1,57 +1,64 @@
 import { Request, Response } from 'express';
-import { InterviewQuestionsService } from '../services/interviewQuestionsService';
+import { IInterviewQuestion } from '../models/interviewQuestionsModel';
+import interviewQuestionsService from '../services/interviewQuestionsService';
 
-export class InterviewQuestionsController {
-	// Find by id
-	static findById = async (req: Request, res: Response) => {
-		if (!req.body) { 
-			res.status(400).send({ message: "Body can not be empty!" });
-		}
-
-		res.send(await InterviewQuestionsService.findById(req.params.id));
-	} 
-
-	// Find all
-	static findAll = async (req: Request, res: Response) => {
-		res.send(await InterviewQuestionsService.findAll());
+async function findById(req: Request, res: Response) {
+	if (!req.body) { 
+		res.status(400).send({ message: "Body can not be empty!" });
 	}
 
-	// Create
-	static create = async (req: Request, res: Response) => {
-		if (!req.body) {
-			res.status(400).send({ message: "Body can not be empty!" });
-		}
+	const result: IInterviewQuestion = await interviewQuestionsService.findById(req.params.id);
+	res.send(result);
+}
 
-		const newInterviewQuestion = new InterviewQuestionsService({
-			id: '',
-			interview: req.body.interview,
-			question: req.body.question,
-			grade: req.body.grade,
-			comment: req.body.comment
-		});
+async function findAll(req: Request, res: Response) {
+	const result: IInterviewQuestion[] = await interviewQuestionsService.findAll();
+	res.send(result);
+}
 
-		res.send(await InterviewQuestionsService.create(newInterviewQuestion));
+async function create(req: Request, res: Response) {
+	if (!req.body) {
+		res.status(400).send({ message: "Body can not be empty!" });
 	}
 
-	// Update by id
-	static updateById = async (req: Request, res: Response) => {
-		if (!req.body) {
-			res.status(400).send({ message: "Body can not be empty!" });
-		}
+	const newInterviewQuestion: IInterviewQuestion = {
+		id: '',
+		interview: req.body.interview,
+		question: req.body.question,
+		grade: req.body.grade,
+		comment: req.body.comment
+	};
 
-		const updatedInterviewQuestion = new InterviewQuestionsService({
-			id: req.params.id,
-			interview: req.body.interview,
-			question: req.body.question,
-			grade: req.body.grade,
-			comment: req.body.comment
-		});
+	const result: IInterviewQuestion = await interviewQuestionsService.create(newInterviewQuestion)
+	res.send(result);
+}
 
-		res.send(await InterviewQuestionsService.updateById(req.params.id, updatedInterviewQuestion));
+async function updateById(req: Request, res: Response) {
+	if (!req.body) {
+		res.status(400).send({ message: "Body can not be empty!" });
 	}
 
-	// Remove by id
-	static removeById = async (req: Request, res: Response) => {
-		res.send(await InterviewQuestionsService.removeById(req.params.id));
-	}
-};
+	const updatedInterviewQuestion: IInterviewQuestion = {
+		id: req.params.id,
+		interview: req.body.interview,
+		question: req.body.question,
+		grade: req.body.grade,
+		comment: req.body.comment
+	};
+
+	const result: IInterviewQuestion = await interviewQuestionsService.updateById(req.params.id, updatedInterviewQuestion);
+	res.send(result);
+}
+
+async function removeById(req: Request, res: Response) {
+	const result: IInterviewQuestion = await interviewQuestionsService.removeById(req.params.id)
+	res.send(result);
+}
+
+export default {
+	findById,
+	findAll,
+	create,
+	updateById,
+	removeById
+}

@@ -1,53 +1,60 @@
 import { Request, Response } from 'express';
-import { CandidateTechnicalFieldsService } from '../services/candidateTechnicalFieldsService';
+import { ICandidateTechnicalField } from '../models/candidateTechnicalFieldsModel';
+import candidateTechnicalFieldsService from '../services/candidateTechnicalFieldsService';
 
-export class CandidateTechnicalFieldsController {
-	// Find by id
-	static findById = async (req: Request, res: Response) => {
-		if (!req.body) { 
-			res.status(400).send({ message: "Body can not be empty!" });
-		}
-
-		res.send(await CandidateTechnicalFieldsService.findById(req.params.id));
-	} 
-
-	// Find all
-	static findAll = async (req: Request, res: Response) => {
-		res.send(await CandidateTechnicalFieldsService.findAll());
+async function findById(req: Request, res: Response) {
+	if (!req.body) { 
+		res.status(400).send({ message: "Body can not be empty!" });
 	}
 
-	// Create
-	static create = async (req: Request, res: Response) => {
-		if (!req.body) {
-			res.status(400).send({ message: "Body can not be empty!" });
-		}
+	const result: ICandidateTechnicalField = await candidateTechnicalFieldsService.findById(req.params.id);
+	res.send(result);
+}
 
-		const newCandidateTechnicalField = new CandidateTechnicalFieldsService({
-			id: '',
-			candidate: req.body.candidate,
-			technicalField: req.body.technicalField
-		});
+async function findAll(req: Request, res: Response) {
+	const result: ICandidateTechnicalField[] = await candidateTechnicalFieldsService.findAll();
+	res.send(result);
+}
 
-		res.send(await CandidateTechnicalFieldsService.create(newCandidateTechnicalField));
+async function create(req: Request, res: Response) {
+	if (!req.body) {
+		res.status(400).send({ message: "Body can not be empty!" });
 	}
 
-	// Update by id
-	static updateById = async (req: Request, res: Response) => {
-		if (!req.body) {
-			res.status(400).send({ message: "Body can not be empty!" });
-		}
+	const newCandidateTechnicalField: ICandidateTechnicalField = {
+		id: '',
+		candidate: req.body.candidate,
+		technicalField: req.body.technicalField
+	};
 
-		const updatedCandidateTechnicalField = new CandidateTechnicalFieldsService({
-			id: req.params.id,
-			candidate: req.body.candidate,
-			technicalField: req.body.technicalField
-		});
+	const result: ICandidateTechnicalField = await candidateTechnicalFieldsService.create(newCandidateTechnicalField);
+	res.send(result);
+}
 
-		res.send(await CandidateTechnicalFieldsService.updateById(req.params.id, updatedCandidateTechnicalField));
+async function updateById(req: Request, res: Response) {
+	if (!req.body) {
+		res.status(400).send({ message: "Body can not be empty!" });
 	}
 
-	// Remove by id
-	static removeById = async (req: Request, res: Response) => {
-		res.send(await CandidateTechnicalFieldsService.removeById(req.params.id));
-	}
-};
+	const updatedCandidateTechnicalField: ICandidateTechnicalField = {
+		id: req.params.id,
+		candidate: req.body.candidate,
+		technicalField: req.body.technicalField
+	};
+
+	const result: ICandidateTechnicalField = await candidateTechnicalFieldsService.updateById(req.params.id, updatedCandidateTechnicalField);
+	res.send(result);
+}
+
+async function removeById(req: Request, res: Response) {
+	const result: ICandidateTechnicalField = await candidateTechnicalFieldsService.removeById(req.params.id);
+	res.send(result);
+}
+
+export default {
+	findById,
+	findAll,
+	create,
+	updateById,
+	removeById
+}

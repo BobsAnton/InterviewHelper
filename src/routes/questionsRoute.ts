@@ -1,16 +1,16 @@
 import express from 'express';
-import { QuestionsController } from '../controllers/questionsController';
+import questionsController from '../controllers/questionsController';
 
 const router = express.Router();
 
-router.get("/:id", QuestionsController.findById);
+router.get("/:id", questionsController.findById);
 
-router.get('/', QuestionsController.findAll);
+router.get('/', questionsController.findAll);
 
-router.post('/', QuestionsController.create);
+router.post('/', questionsController.create);
 
-router.delete('/:id', QuestionsController.removeById);
+router.delete('/:id', questionsController.removeById);
 
-router.put('/:id', QuestionsController.updateById);
+router.put('/:id', questionsController.updateById);
 
 export const questionsRouter = router;

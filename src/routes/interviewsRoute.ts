@@ -1,16 +1,16 @@
 import express from 'express';
-import { InterviewsController } from '../controllers/interviewsController';
+import interviewsController from '../controllers/interviewsController';
 
 const router = express.Router();
 
-router.get("/:id", InterviewsController.findById);
+router.get("/:id", interviewsController.findById);
 
-router.get('/', InterviewsController.findAll);
+router.get('/', interviewsController.findAll);
 
-router.post('/', InterviewsController.create);
+router.post('/', interviewsController.create);
 
-router.delete('/:id', InterviewsController.removeById);
+router.delete('/:id', interviewsController.removeById);
 
-router.put('/:id', InterviewsController.updateById);
+router.put('/:id', interviewsController.updateById);
 
 export const interviewsRouter = router;

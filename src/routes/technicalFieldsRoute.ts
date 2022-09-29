@@ -1,16 +1,16 @@
 import express from 'express';
-import { TechnicalFieldsController } from '../controllers/technicalFieldsController';
+import technicalFieldsController from '../controllers/technicalFieldsController';
 
 const router = express.Router();
 
-router.get("/:id", TechnicalFieldsController.findById);
+router.get("/:id", technicalFieldsController.findById);
 
-router.get('/', TechnicalFieldsController.findAll);
+router.get('/', technicalFieldsController.findAll);
 
-router.post('/', TechnicalFieldsController.create);
+router.post('/', technicalFieldsController.create);
 
-router.delete('/:id', TechnicalFieldsController.removeById);
+router.delete('/:id', technicalFieldsController.removeById);
 
-router.put('/:id', TechnicalFieldsController.updateById);
+router.put('/:id', technicalFieldsController.updateById);
 
 export const technicalFieldsRouter = router;
