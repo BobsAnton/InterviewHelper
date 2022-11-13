@@ -1,16 +1,17 @@
 import express from 'express';
 import questionsController from '../controllers/questionsController';
+import { auth } from '../middleware/auth';
 
 const router = express.Router();
 
-router.get("/:id", questionsController.findById);
+router.get("/:id", auth, questionsController.findById);
 
-router.get('/', questionsController.findAll);
+router.get('/', auth, questionsController.findAll);
 
-router.post('/', questionsController.create);
+router.post('/', auth, questionsController.create);
 
-router.delete('/:id', questionsController.removeById);
+router.delete('/:id', auth, questionsController.removeById);
 
-router.put('/:id', questionsController.updateById);
+router.put('/:id', auth, questionsController.updateById);
 
 export const questionsRouter = router;

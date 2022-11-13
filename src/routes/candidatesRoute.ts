@@ -1,16 +1,17 @@
 import express from 'express';
 import candidatesController from '../controllers/candidatesController';
+import { auth } from '../middleware/auth';
 
 const router = express.Router();
 
-router.get("/:id", candidatesController.findById);
+router.get("/:id", auth, candidatesController.findById);
 
-router.get('/', candidatesController.findAll);
+router.get('/', auth, candidatesController.findAll);
 
-router.post('/', candidatesController.create);
+router.post('/', auth, candidatesController.create);
 
-router.delete('/:id', candidatesController.removeById);
+router.delete('/:id', auth, candidatesController.removeById);
 
-router.put('/:id', candidatesController.updateById);
+router.put('/:id', auth, candidatesController.updateById);
 
 export const candidatesRouter = router;

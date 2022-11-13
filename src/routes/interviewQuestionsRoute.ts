@@ -1,16 +1,17 @@
 import express from 'express';
 import interviewQuestionsController from '../controllers/interviewQuestionsController';
+import { auth } from '../middleware/auth';
 
 const router = express.Router();
 
-router.get("/:id", interviewQuestionsController.findById);
+router.get("/:id", auth, interviewQuestionsController.findById);
 
-router.get('/', interviewQuestionsController.findAll);
+router.get('/', auth, interviewQuestionsController.findAll);
 
-router.post('/', interviewQuestionsController.create);
+router.post('/', auth, interviewQuestionsController.create);
 
-router.delete('/:id', interviewQuestionsController.removeById);
+router.delete('/:id', auth, interviewQuestionsController.removeById);
 
-router.put('/:id', interviewQuestionsController.updateById);
+router.put('/:id', auth, interviewQuestionsController.updateById);
 
 export const interviewQuestionsRouter = router;

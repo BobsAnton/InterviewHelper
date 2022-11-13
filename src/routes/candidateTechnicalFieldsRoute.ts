@@ -1,16 +1,17 @@
 import express from 'express';
 import candidateTechnicalFieldsController from '../controllers/candidateTechnicalFieldsController';
+import { auth } from '../middleware/auth';
 
 const router = express.Router();
 
-router.get("/:id", candidateTechnicalFieldsController.findById);
+router.get("/:id", auth, candidateTechnicalFieldsController.findById);
 
-router.get('/', candidateTechnicalFieldsController.findAll);
+router.get('/', auth, candidateTechnicalFieldsController.findAll);
 
-router.post('/', candidateTechnicalFieldsController.create);
+router.post('/', auth, candidateTechnicalFieldsController.create);
 
-router.delete('/:id', candidateTechnicalFieldsController.removeById);
+router.delete('/:id', auth, candidateTechnicalFieldsController.removeById);
 
-router.put('/:id', candidateTechnicalFieldsController.updateById);
+router.put('/:id', auth, candidateTechnicalFieldsController.updateById);
 
 export const candidateTechnicalFieldsRouter = router;

@@ -11,6 +11,7 @@ import { interviewsRouter } from "./routes/interviewsRoute";
 import { interviewQuestionsRouter } from "./routes/interviewQuestionsRoute";
 import { candidateTechnicalFieldsRouter } from "./routes/candidateTechnicalFieldsRoute";
 import { candidatesRouter } from "./routes/candidatesRoute";
+import { usersRouter } from "./routes/userRoute";
 
 async function run(): Promise<void> {
     await mongoose.connect(appConfig.mongodbConnectionString);
@@ -29,6 +30,7 @@ async function run(): Promise<void> {
     app.use("/interview-questions", interviewQuestionsRouter);
     app.use("/candidate-technical-fields", candidateTechnicalFieldsRouter);
     app.use("/candidates", candidatesRouter);
+    app.use("/auth", usersRouter);
 
     app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
         console.error(err.stack)
